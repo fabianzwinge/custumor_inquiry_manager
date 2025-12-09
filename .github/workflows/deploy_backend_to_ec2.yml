@@ -33,6 +33,10 @@ jobs:
           SCRIPT_AFTER: |
             cd ${{ secrets.SSH_TARGET_BACKEND }}
 
+            echo "Ensuring python3-venv is installed..."
+            sudo apt-get update -y
+            sudo apt-get install -y python3-venv
+            
             echo "Ensuring Python venv exists..."
             if [ ! -d "venv" ]; then
               echo "Creating new venv..."
