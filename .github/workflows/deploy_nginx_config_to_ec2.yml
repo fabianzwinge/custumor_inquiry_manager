@@ -1,0 +1,51 @@
+name: Deploy Nginx Config to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy_nginx_config_to_ec2.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-nginx-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload Nginx config and configure Nginx on EC2
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+          REMOTE_HOST:     ${{ secrets.SSH_HOST }}
+          REMOTE_USER:     ${{ secrets.SSH_USER }}
+          REMOTE_PORT:     ${{ secrets.SSH_PORT }}
+          TARGET: "/tmp/nginx-config/"
+          SOURCE: "infra/nginx/site.conf"
+          SCRIPT_AFTER: |
+            echo "Installing Nginx if not present..."
+            sudo apt-get update -y
+            sudo apt-get install -y nginx
+
+            echo "Creating frontend webroot..."
+            sudo mkdir -p /home/ubuntu/frontend
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/frontend
+            sudo chmod -R 755 /home/ubuntu/frontend
+
+            echo "Moving site.conf into /etc/nginx/sites-available..."
+            sudo mv /tmp/nginx-config/site.conf /etc/nginx/sites-available/site
+
+            echo "Enabling site config and disabling default site..."
+            sudo ln -sf /etc/nginx/sites-available/site /etc/nginx/sites-enabled/site
+            sudo rm -f /etc/nginx/sites-enabled/default || true
+
+            echo "Testing nginx configuration..."
+            sudo nginx -t
+
+            echo "Reloading nginx..."
+            sudo systemctl reload nginx
+
+            echo "Done. Nginx is configured with site.conf."
