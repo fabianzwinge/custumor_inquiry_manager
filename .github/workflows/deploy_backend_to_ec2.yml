@@ -1,0 +1,52 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync backend code to EC2 and restart service
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY:   ${{ secrets.DEPLOY_KEY }}
+          REMOTE_HOST:       ${{ secrets.DEPLOY_HOST }}
+          REMOTE_USER:       ${{ secrets.DEPLOY_USER }}
+          REMOTE_PORT:       ${{ secrets.DEPLOY_PORT }}
+          TARGET:            ${{ secrets.BACKEND_TARGET }}
+          SOURCE: "backend/"
+          SCRIPT_AFTER: |
+            cd $BACKEND_TARGET
+
+            echo "Ensuring Python venv exists..."
+            if [ ! -d "venv" ]; then
+              echo "Creating new venv..."
+              python3 -m venv venv
+            fi
+
+            echo "Activating venv and installing requirements..."
+            source venv/bin/activate
+            pip install -r requirements.txt
+
+            echo "Restarting backend systemd service..."
+            sudo systemctl restart backend.service
+
+            echo "Service status:"
+            sudo systemctl status backend.service --no-pager || true
+
+            echo "Backend deploy finished."
