@@ -1,0 +1,43 @@
+name: Deploy Systemd Backend Service to EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-backend-service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload backend service file to EC2
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY:   ${{ secrets.DEPLOY_KEY }}
+          REMOTE_HOST:       ${{ secrets.DEPLOY_HOST }}
+          REMOTE_USER:       ${{ secrets.DEPLOY_USER }}
+          REMOTE_PORT:       ${{ secrets.DEPLOY_PORT }}
+          TARGET: "/tmp/backend-service/"
+          SOURCE: "infra/systemd/backend.service"
+          SCRIPT_AFTER: |
+            echo "Moving service file into /etc/systemd/system..."
+            sudo mv /tmp/backend-service/backend.service /etc/systemd/system/backend.service
+            sudo chown root:root /etc/systemd/system/backend.service
+
+            echo "Reloading systemd daemon..."
+            sudo systemctl daemon-reload
+
+            echo "Enabling service on boot..."
+            sudo systemctl enable backend.service
+
+            echo "Starting service..."
+            sudo systemctl start backend.service || true
+
+            echo "Restarting service..."
+            sudo systemctl restart backend.service
+
+            echo "Checking service status:"
+            sudo systemctl status backend.service --no-pager || true
+
+            echo "Systemd service setup complete."
