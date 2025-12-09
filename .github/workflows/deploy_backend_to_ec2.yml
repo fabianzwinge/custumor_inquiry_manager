@@ -24,14 +24,13 @@ jobs:
       - name: Sync backend code to EC2 and restart service
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          SSH_PRIVATE_KEY:   ${{ secrets.DEPLOY_KEY }}
-          REMOTE_HOST:       ${{ secrets.DEPLOY_HOST }}
-          REMOTE_USER:       ${{ secrets.DEPLOY_USER }}
-          REMOTE_PORT:       ${{ secrets.DEPLOY_PORT }}
-          TARGET:            ${{ secrets.BACKEND_TARGET }}
+          SSH_PRIVATE_KEY:   ${{ secrets.SSH_KEY }}
+          REMOTE_HOST:       ${{ secrets.SSH_HOST }}
+          REMOTE_USER:       ${{ secrets.SSH_USER }}
+          REMOTE_PORT:       ${{ secrets.SSH_PORT }}
+          TARGET:            ${{ secrets.SSH_TARGET_BACKEND }}
           SOURCE: "backend/"
           SCRIPT_AFTER: |
-            cd $BACKEND_TARGET
 
             echo "Ensuring Python venv exists..."
             if [ ! -d "venv" ]; then
