@@ -1,11 +1,6 @@
 name: Deploy Nginx Config to EC2
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/workflows/deploy_nginx_config_to_ec2.yml'
   workflow_dispatch:
 
 jobs:
