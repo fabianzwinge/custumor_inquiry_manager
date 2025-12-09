@@ -36,5 +36,10 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: ${{ secrets.SSH_PORT }}
-          TARGET: ${{ secrets.SSH_TARGET }}
+          TARGET: ${{ secrets.SSH_TARGET_FRONTEND }}
           SOURCE: "frontend/build/"
+          SCRIPT_BEFORE: |
+            find ${{ secrets.SSH_TARGET_FRONTEND }} -mindepth 1 -delete
+            ls -al ${{ secrets.SSH_TARGET_FRONTEND }}
+          SCRIPT_AFTER: |
+            ls -al ${{ secrets.SSH_TARGET_FRONTEND }}
