@@ -27,8 +27,8 @@ jobs:
 
             echo "Creating frontend webroot..."
             sudo mkdir -p /home/ubuntu/frontend
-            sudo chown -R ubuntu:ubuntu /home/ubuntu/frontend
-            sudo chmod -R 755 /home/ubuntu/frontend
+            sudo chmod +X /home /home/ubuntu /home/ubuntu/frontend
+
 
             echo "Moving site.conf into /etc/nginx/sites-available..."
             sudo mv /tmp/nginx-config/site.conf /etc/nginx/sites-available/site
