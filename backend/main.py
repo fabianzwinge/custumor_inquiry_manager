@@ -12,6 +12,8 @@ origins = [
     os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
 ]
 
+print("FRONTEND_ORIGIN:", os.getenv("FRONTEND_ORIGIN"))
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
