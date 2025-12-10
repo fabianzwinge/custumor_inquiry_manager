@@ -1,0 +1,139 @@
+.manager-dashboard-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.welcome-greeting {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-text {
+  font-size: 1.125rem;
+  text-align: center;
+  color: #4a5568;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.filter-search-section,
+.inquiries-table-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
+}
+
+.filter-search-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filter-search-section .section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-right: 1rem;
+  color: #333;
+}
+
+.filter-select,
+.search-input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  flex-grow: 1;
+}
+
+.search-input {
+  max-width: 300px;
+}
+
+.inquiries-table-section .section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.inquiries-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  table-layout: fixed;
+}
+
+.inquiries-table thead {
+  background-color: #f9fafb;
+}
+
+.inquiries-table th {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.inquiries-table tbody {
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.inquiries-table td {
+  padding: 1rem 1.5rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  color: #4b5563;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.inquiries-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.inquiries-table td:first-child {
+  font-weight: 500;
+  color: #111827;
+}
+
+.no-inquiries-found {
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .filter-search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-search-section .section-title {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  .search-input {
+    max-width: none;
+  }
+}
