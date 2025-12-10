@@ -13,7 +13,7 @@ const ManagerView = ({ username }) => {
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/manager/inquiries');
+        const response = await fetch('/api/manager/inquiries');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
