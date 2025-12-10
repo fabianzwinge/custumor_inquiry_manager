@@ -1,20 +1,32 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './ManagerView.css';
 
-const initialInquiries = [
-  { id: 1, category: 'Technical', urgency: 'High', summary: 'Login issue on portal', email: 'john.doe@example.com' },
-  { id: 2, category: 'Billing', urgency: 'Medium', summary: 'Question about recent invoice', email: 'jane.smith@example.com' },
-  { id: 3, category: 'General', urgency: 'Low', summary: 'Feedback on new feature', email: 'bob.johnson@example.com' },
-  { id: 4, category: 'Technical', urgency: 'Medium', summary: 'App crashing on startup', email: 'alice.brown@example.com' },
-  { id: 5, category: 'Sales', urgency: 'High', summary: 'Inquiry about enterprise plan', email: 'charlie.d@example.com' },
-];
-
-const ManagerView = () => {
-  const [inquiries, setInquiries] = useState(initialInquiries);
+const ManagerView = ({ username }) => {
+  const [inquiries, setInquiries] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [filterCategory, setFilterCategory] = useState('All');
   const [filterUrgency, setFilterUrgency] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/manager/inquiries');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setInquiries(data.inquiries);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInquiries();
+  }, []);
 
   const sortedInquiries = useMemo(() => {
     let sortableItems = [...inquiries];
@@ -61,77 +73,83 @@ const ManagerView = () => {
 
   return (
     <div className="manager-dashboard-container">
-      <h1 className="welcome-greeting">Hi, Fabian!</h1>
+      <h1 className="welcome-greeting">Hi, {username}!</h1>
       <p className="welcome-text">Here's a summary of the current inquiries to manage them efficiently.</p>
 
-      {/* Filter and Search */}
-      <div className="filter-search-section">
-        <h2 className="section-title">Filter & Search:</h2>
-        <select
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-          className="filter-select"
-        >
-          <option value="All">All Categories</option>
-          <option value="Technical">Technical</option>
-          <option value="Billing">Billing</option>
-          <option value="General">General</option>
-          <option value="Sales">Sales</option>
-        </select>
-        <select
-          value={filterUrgency}
-          onChange={(e) => setFilterUrgency(e.target.value)}
-          className="filter-select"
-        >
-          <option value="All">All Urgencies</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-        <input
-          type="text"
-          placeholder="Search inquiries..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-      </div>
+      {loading && <div className="loading-message">Loading inquiries...</div>}
+      {error && <div className="error-message">Error: {error}</div>}
 
-      <div className="inquiries-table-section">
-        <h2 className="section-title">Inquiries</h2>
-        <div className="table-responsive">
-          <table className="inquiries-table">
-            <thead>
-              <tr>
-                <th onClick={() => requestSort('id')}>ID {getSortIndicator('id')}</th>
-                <th onClick={() => requestSort('category')}>Category {getSortIndicator('category')}</th>
-                <th onClick={() => requestSort('urgency')}>Urgency {getSortIndicator('urgency')}</th>
-                <th>Short Summary</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredInquiries.length > 0 ? (
-                filteredInquiries.map((inquiry) => (
-                  <tr key={inquiry.id}>
-                    <td>{inquiry.id}</td>
-                    <td>{inquiry.category}</td>
-                    <td>{inquiry.urgency}</td>
-                    <td>{inquiry.summary}</td>
-                    <td>{inquiry.email}</td>
+      {!loading && !error && (
+        <>
+          <div className="filter-search-section">
+            <h2 className="section-title">Filter & Search:</h2>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="filter-select"
+            >
+              <option value="All">All Categories</option>
+              <option value="Technical">Technical</option>
+              <option value="Billing">Billing</option>
+              <option value="General">General</option>
+              <option value="Sales">Sales</option>
+            </select>
+            <select
+              value={filterUrgency}
+              onChange={(e) => setFilterUrgency(e.target.value)}
+              className="filter-select"
+            >
+              <option value="All">All Urgencies</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Search inquiries..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+
+          <div className="inquiries-table-section">
+            <h2 className="section-title">Inquiries</h2>
+            <div className="table-responsive">
+              <table className="inquiries-table">
+                <thead>
+                  <tr>
+                    <th onClick={() => requestSort('id')}>ID {getSortIndicator('id')}</th>
+                    <th onClick={() => requestSort('category')}>Category {getSortIndicator('category')}</th>
+                    <th onClick={() => requestSort('urgency')}>Urgency {getSortIndicator('urgency')}</th>
+                    <th>Short Summary</th>
+                    <th>Email</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="no-inquiries-found">
-                    No inquiries found matching your criteria.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                </thead>
+                <tbody>
+                  {filteredInquiries.length > 0 ? (
+                    filteredInquiries.map((inquiry) => (
+                      <tr key={inquiry.id}>
+                        <td>{inquiry.id}</td>
+                        <td>{inquiry.category}</td>
+                        <td>{inquiry.urgency}</td>
+                        <td>{inquiry.summary}</td>
+                        <td>{inquiry.email}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="no-inquiries-found">
+                        No inquiries found matching your criteria.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

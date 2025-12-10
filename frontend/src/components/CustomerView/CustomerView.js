@@ -13,12 +13,26 @@ const CustomerView = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Inquiry Submitted:', formData);
-  // PLACEHOLDER FOR BACKEND INTEGRATION
-    alert('Inquiry submitted successfully!');
-    setFormData({ name: '', email: '', inquiry: '' }); // Clear form
+    try {
+      const response = await fetch('http://localhost:8000/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        alert('Inquiry submitted successfully!');
+        setFormData({ name: '', email: '', inquiry: '' }); // Clear form
+      } else {
+        alert('Failed to submit inquiry. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting inquiry:', error);
+      alert('An error occurred. Please try again later.');
+    }
   };
 
   return (

@@ -7,6 +7,12 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const handleLoginSuccess = (loggedInUsername) => {
+    setIsAuthenticated(true);
+    setUsername(loggedInUsername);
+  };
 
   return (
     <Router>
@@ -28,10 +34,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/customer" element={<CustomerView />} />
-          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
           <Route
             path="/manager"
-            element={isAuthenticated ? <ManagerView /> : <Navigate to="/login" replace />}
+            element={isAuthenticated ? <ManagerView username={username} /> : <Navigate to="/login" replace />}
           />
         </Routes>
       </div>

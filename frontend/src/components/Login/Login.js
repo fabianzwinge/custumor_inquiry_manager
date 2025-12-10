@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -11,7 +11,7 @@ const Login = ({ setIsAuthenticated }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     if (username === 'Fabian' && password === 'admin') { // Simple hardcoded authentication for demo
-      setIsAuthenticated(true);
+      onLoginSuccess(username);
       navigate('/manager');
     } else {
       setError('Invalid username or password');
