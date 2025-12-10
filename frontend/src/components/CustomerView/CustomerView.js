@@ -16,7 +16,7 @@ const CustomerView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/inquiries', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || ''}/api/inquiries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const ManagerView = ({ username }) => {
   useEffect(() => {
     const fetchInquiries = async () => {
       try {
-        const response = await fetch('/api/manager/inquiries');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || ''}/api/manager/inquiries`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -132,7 +132,10 @@ const ManagerView = ({ username }) => {
                       <tr key={inquiry.id}>
                         <td>{inquiry.id}</td>
                         <td>{inquiry.category}</td>
-                        <td>{inquiry.urgency}</td>
+                        <td>
+                          <span className={`urgency-icon urgency-icon-${inquiry.urgency.toLowerCase()}`}></span>
+                          {inquiry.urgency}
+                        </td>
                         <td>{inquiry.summary}</td>
                         <td>{inquiry.email}</td>
                       </tr>
