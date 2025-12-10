@@ -1,0 +1,20 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Byte-code files
+__pycache__/
+
+# IDE-specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
