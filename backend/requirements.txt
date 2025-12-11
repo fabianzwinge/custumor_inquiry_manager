@@ -6,4 +6,4 @@ langchain
 langchain-aws
 pydantic
 sqlalchemy 
-psycopg2
+psycopg2-binary
