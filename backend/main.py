@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
+import boto3
+import json
 
 load_dotenv()
 
@@ -21,6 +23,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+bedrock = boto3.client(
+    "bedrock-runtime",
+    region_name="us-east-1" 
+)
+
+model_id = "amazon.titan-text-lite-v1"
 
 class Inquiry(BaseModel):
     name: str
@@ -51,3 +60,30 @@ async def get_manager_inquiries():
         {"id": 5, "category": "Sales", "urgency": "High", "summary": "Inquiry about enterprise plan", "email": "charlie.d@example.com"},
     ]
     return {"inquiries": initial_inquiries}
+
+@app.get("/api/bedrock-test")
+async def bedrock_test():
+    try:
+        prompt = "Describe the purpose of a 'hello world' program in one line."
+
+        payload = {
+            "inputText": prompt,
+            "textGenerationConfig": {
+                "maxTokenCount": 512,
+                "temperature": 0.5,
+            },
+        }
+
+        response = bedrock.invoke_model(
+            modelId=model_id,
+            body=json.dumps(payload),
+            contentType="application/json",
+            accept="application/json"
+        )
+
+        result = json.loads(response["body"].read())
+        return {"prompt": prompt, "response": result}
+
+    except Exception as e:
+        print("Bedrock error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
