@@ -5,3 +5,5 @@ boto3
 langchain
 langchain-aws
 pydantic
+sqlalchemy 
+psycopg2
