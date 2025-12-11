@@ -47,6 +47,7 @@ class InquiryClassification(BaseModel):
 try:
     model = ChatBedrock(
         model_id="mistral.mistral-small-2402-v1:0",
+        region_name="us-east-1",
         model_kwargs={"temperature": 0.1},
     )
 
