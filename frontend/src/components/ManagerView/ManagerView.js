@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ManagerView.css';
 
 const ManagerView = ({ username }) => {
@@ -9,6 +10,7 @@ const ManagerView = ({ username }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -62,6 +64,10 @@ const ManagerView = ({ username }) => {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
+  };
+
+  const handleRowClick = (id) => {
+    navigate(`/inquiry/${id}`);
   };
 
   const getSortIndicator = (key) => {
@@ -129,7 +135,7 @@ const ManagerView = ({ username }) => {
                 <tbody>
                   {filteredInquiries.length > 0 ? (
                     filteredInquiries.map((inquiry) => (
-                      <tr key={inquiry.id}>
+                      <tr key={inquiry.id} onClick={() => handleRowClick(inquiry.id)}>
                         <td>{inquiry.id}</td>
                         <td>{inquiry.category}</td>
                         <td>

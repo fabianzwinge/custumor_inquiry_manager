@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import CustomerView from './components/CustomerView/CustomerView';
 import ManagerView from './components/ManagerView/ManagerView';
+import InquiryDetailView from './components/InquiryDetailView/InquiryDetailView';
 import Login from './components/Login/Login';
 import './App.css'; 
 
@@ -38,6 +39,10 @@ function App() {
           <Route
             path="/manager"
             element={isAuthenticated ? <ManagerView username={username} /> : <Navigate to="/login" replace />}
+          />
+          <Route
+            path="/inquiry/:id"
+            element={isAuthenticated ? <InquiryDetailView /> : <Navigate to="/login" replace />}
           />
         </Routes>
       </div>

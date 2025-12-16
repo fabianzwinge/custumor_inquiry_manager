@@ -168,3 +168,36 @@ async def get_manager_inquiries(db=Depends(get_db)):
 
     print(inquiries)
     return {"inquiries": inquiries}
+
+@app.get("/api/inquiries/{inquiry_id}")
+async def get_inquiry_by_id(inquiry_id: int, db=Depends(get_db)):
+    record = db.query(InquiryRecord).filter(InquiryRecord.id == inquiry_id).first()
+
+    if not record:
+        raise HTTPException(status_code=404, detail="Inquiry not found")
+
+    return {
+        "id": record.id,
+        "name": record.name,
+        "email": record.email,
+        "inquiry": record.inquiry_text,
+        "category": record.category,
+        "urgency": record.urgency,
+        "summary": record.summary,
+        "created_at": record.created_at.isoformat() if record.created_at else None,
+    }
+
+class InquiryResponse(BaseModel):
+    response: str
+
+@app.post("/api/inquiries/{inquiry_id}/respond")
+async def respond_to_inquiry(inquiry_id: int, response: InquiryResponse, db=Depends(get_db)):
+    # Check if inquiry exists
+    record = db.query(InquiryRecord).filter(InquiryRecord.id == inquiry_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Inquiry not found")
+
+    # For now, just print the response
+    print(f"Response for inquiry {inquiry_id}: {response.response}")
+
+    return {"message": "Response submitted successfully"}

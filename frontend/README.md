@@ -2,11 +2,12 @@
 
 To set up and run the frontend application:
 
-1.  **Create a `.env` file** in the `frontend` directory with your local backend URL:
+1.  **Create a `.env` file** in the `frontend` directory with the following variables:
     ```
     REACT_APP_BACKEND_URL=YourLocalBackendUrl
+    REACT_APP_ADMIN_USERNAME=YourUsername
+    REACT_APP_ADMIN_PASSWORD=YourPassword
     ```
-    Replace `YourLocalBackendUrl` with the actual URL of your backend.
 
 2.  **Install dependencies**:
     ```bash

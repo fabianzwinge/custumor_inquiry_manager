@@ -10,7 +10,11 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === 'Fabian' && password === 'admin') { // Simple hardcoded authentication for demo
+    // Use environment variables for username and password
+    const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
+    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+
+    if (username === adminUsername && password === adminPassword) {
       onLoginSuccess(username);
       navigate('/manager');
     } else {

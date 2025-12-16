@@ -76,9 +76,16 @@
 .inquiries-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 700px;
-  table-layout: fixed;
+  table-layout: fixed; /* Use fixed layout for predictable column widths */
 }
+
+/* Set specific widths for columns */
+.inquiries-table th:nth-child(1), .inquiries-table td:nth-child(1) { width: 5%; } /* ID */
+.inquiries-table th:nth-child(2), .inquiries-table td:nth-child(2) { width: 15%; } /* Category */
+.inquiries-table th:nth-child(3), .inquiries-table td:nth-child(3) { width: 15%; } /* Urgency */
+.inquiries-table th:nth-child(4), .inquiries-table td:nth-child(4) { width: 40%; word-wrap: break-word; } /* Short Summary */
+.inquiries-table th:nth-child(5), .inquiries-table td:nth-child(5) { width: 25%; word-wrap: break-word; } /* Email */
+
 
 .inquiries-table thead {
   background-color: #f9fafb;
@@ -98,6 +105,14 @@
 .inquiries-table tbody {
   background-color: white;
   border-top: 1px solid #e5e7eb;
+}
+
+.inquiries-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.inquiries-table tbody tr {
+    cursor: pointer;
 }
 
 .inquiries-table td {
