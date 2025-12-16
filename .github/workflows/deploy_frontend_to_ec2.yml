@@ -28,6 +28,9 @@ jobs:
       - name: Run build task
         run: CI=false npm run build
         working-directory: frontend
+        env:                                                                                                                                              
+          REACT_APP_ADMIN_USERNAME: ${{ secrets.REACT_APP_ADMIN_USERNAME }}                                                                               
+          REACT_APP_ADMIN_PASSWORD: ${{ secrets.REACT_APP_ADMIN_PASSWORD }}
 
       - name: Deploy to EC2
         uses: easingthemes/ssh-deploy@v5.1.0
