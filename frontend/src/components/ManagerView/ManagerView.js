@@ -128,7 +128,7 @@ const ManagerView = ({ username }) => {
                     <th onClick={() => requestSort('id')}>ID {getSortIndicator('id')}</th>
                     <th onClick={() => requestSort('category')}>Category {getSortIndicator('category')}</th>
                     <th onClick={() => requestSort('urgency')}>Urgency {getSortIndicator('urgency')}</th>
-                    <th>Short Summary</th>
+                    <th>Summary</th>
                     <th>Email</th>
                   </tr>
                 </thead>

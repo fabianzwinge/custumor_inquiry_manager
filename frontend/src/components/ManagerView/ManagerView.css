@@ -75,6 +75,7 @@
 
 .inquiries-table {
   width: 100%;
+  min-width: 750px; /* Force horizontal scroll on smaller screens */
   border-collapse: collapse;
   table-layout: fixed; /* Use fixed layout for predictable column widths */
 }
@@ -83,7 +84,16 @@
 .inquiries-table th:nth-child(1), .inquiries-table td:nth-child(1) { width: 5%; } /* ID */
 .inquiries-table th:nth-child(2), .inquiries-table td:nth-child(2) { width: 15%; } /* Category */
 .inquiries-table th:nth-child(3), .inquiries-table td:nth-child(3) { width: 15%; } /* Urgency */
-.inquiries-table th:nth-child(4), .inquiries-table td:nth-child(4) { width: 40%; word-wrap: break-word; } /* Short Summary */
+
+/* Summary Column */
+.inquiries-table th:nth-child(4) { width: 40%; }
+.inquiries-table td:nth-child(4) {
+  width: 40%;
+  word-wrap: break-word;
+  white-space: normal; /* Ensure content wrapping */
+}
+
+/* Email Column */
 .inquiries-table th:nth-child(5), .inquiries-table td:nth-child(5) { width: 25%; word-wrap: break-word; } /* Email */
 
 
@@ -100,6 +110,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
+  white-space: nowrap; /* Prevent table headers from wrapping */
 }
 
 .inquiries-table tbody {
