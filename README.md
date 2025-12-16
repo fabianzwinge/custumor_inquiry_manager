@@ -1,5 +1,7 @@
 # 🚀 AWS Customer Inquiry Manager
 
+# 🚀 AWS Customer Inquiry Manager
+
 This project provides a solution for managing customer inquiries, featuring a ReactJS frontend and a FastAPI backend, both deployed on AWS EC2. It uses AWS Bedrock for AI-powered inquiry classification, AWS RDS for database storage and AWS SES for automated email communication.
 
 
@@ -23,4 +25,9 @@ This project provides a solution for managing customer inquiries, featuring a Re
 - **SES:** Email sending service for notifications and responses
 - **IAM:** Secure access and permissions management
 
+## 📝 Prerequisites
 
+- Node.js & npm (for frontend)
+- Python 3.8+ & pip (for backend)
+- AWS account with access to EC2, RDS, Bedrock, SES, and IAM
+- AWS CLI configured with appropriate credentials
