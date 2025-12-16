@@ -76,12 +76,15 @@ async def submit_inquiry(inquiry: Inquiry, db=Depends(get_db)):
         print(f"DB error while saving inquiry: {e}")
         raise HTTPException(status_code=500, detail="Failed to save inquiry to database")
     
-    send_confirmation_email(
+    email_message_id = send_confirmation_email(
         to_address=record.email,
         name=record.name,
         inquiry_id=record.id,
         inquiry_text=record.inquiry_text
     )
+    
+    if not email_message_id:
+        raise HTTPException(status_code=500, detail="Inquiry saved, but failed to send confirmation email.")
     
     return {
         "message": "Inquiry classified and confirmation email sent successfully",

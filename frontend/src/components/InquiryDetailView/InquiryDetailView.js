@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './InquiryDetailView.css';
+import { toast } from 'react-toastify';
 
 const InquiryDetailView = () => {
     const { id } = useParams();
     const [inquiry, setInquiry] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null); // This is for fetching inquiry details, not response submission
     const [response, setResponse] = useState('');
 
     useEffect(() => {
@@ -20,6 +21,7 @@ const InquiryDetailView = () => {
                 setInquiry(data);
             } catch (err) {
                 setError(err.message);
+                toast.error(`Error fetching inquiry details: ${err.message}`); // Also show toast for fetch errors
             } finally {
                 setLoading(false);
             }
@@ -31,7 +33,7 @@ const InquiryDetailView = () => {
     const handleResponseSubmit = async (e) => {
         e.preventDefault();
         if (!response.trim()) {
-            alert("Response cannot be empty.");
+            toast.error("Response cannot be empty.");
             return;
         }
 
@@ -45,20 +47,24 @@ const InquiryDetailView = () => {
             });
 
             if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
+                const errorData = await res.json();
+                const errorMessage = errorData.detail || `Failed to submit response. HTTP error! status: ${res.status}`;
+                toast.error(errorMessage);
+                return; // Stop execution after showing error
             }
 
-            alert("Response submitted successfully!");
+            toast.success("Response submitted successfully!");
             setResponse('');
 
         } catch (err) {
-            setError(err.message);
-            alert("Failed to submit response.");
+            console.error('Error submitting response:', err);
+            const errorMessage = err.message || "Failed to submit response. An unexpected error occurred.";
+            toast.error(errorMessage);
         }
     };
 
     if (loading) return <div className="loading-message">Loading inquiry details...</div>;
-    if (error) return <div className="error-message">Error: {error}</div>;
+    if (error) return <div className="error-message">Error: {error}</div>; // Keep this for initial fetch error display
     if (!inquiry) return <div className="loading-message">Inquiry not found.</div>;
 
     return (

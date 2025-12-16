@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './CustomerView.css';
+import { toast } from 'react-toastify';
 
 const CustomerView = () => {
   const [formData, setFormData] = useState({
@@ -24,14 +25,16 @@ const CustomerView = () => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
-        alert('Inquiry submitted successfully!');
+        toast.success('Inquiry submitted successfully!');
         setFormData({ name: '', email: '', inquiry: '' }); // Clear form
       } else {
-        alert('Failed to submit inquiry. Please try again.');
+        const errorData = await response.json();
+        const errorMessage = errorData.detail || 'Failed to submit inquiry. Please try again.';
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error('Error submitting inquiry:', error);
-      alert('An error occurred. Please try again later.');
+      toast.error('An error occurred. Please try again later.');
     }
   };
 

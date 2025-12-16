@@ -5,6 +5,8 @@ import ManagerView from './components/ManagerView/ManagerView';
 import InquiryDetailView from './components/InquiryDetailView/InquiryDetailView';
 import Login from './components/Login/Login';
 import './App.css'; 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,6 +20,7 @@ function App() {
   return (
     <Router>
       <div>
+        <ToastContainer />
         <nav className="navbar">
           <div className="navbar-container">
             <Link to="/" className="navbar-brand">Customer Inquiry Manager</Link>
