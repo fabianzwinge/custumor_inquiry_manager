@@ -84,6 +84,7 @@
 .inquiries-table th:nth-child(1), .inquiries-table td:nth-child(1) { width: 5%; } /* ID */
 .inquiries-table th:nth-child(2), .inquiries-table td:nth-child(2) { width: 15%; } /* Category */
 .inquiries-table th:nth-child(3), .inquiries-table td:nth-child(3) { width: 15%; } /* Urgency */
+.inquiries-table td:nth-child(3) { white-space: nowrap; } /* Prevent icon and text from wrapping */
 
 /* Summary Column */
 .inquiries-table th:nth-child(4) { width: 40%; }
