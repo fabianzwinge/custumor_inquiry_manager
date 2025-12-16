@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from database import get_db, InquiryRecord, init_db
 from bedrock_llm import chain, parser, InquiryClassification
+from ses import send_confirmation_email, send_response_email
 
 load_dotenv()
 
@@ -75,8 +76,15 @@ async def submit_inquiry(inquiry: Inquiry, db=Depends(get_db)):
         print(f"DB error while saving inquiry: {e}")
         raise HTTPException(status_code=500, detail="Failed to save inquiry to database")
     
+    send_confirmation_email(
+        to_address=record.email,
+        name=record.name,
+        inquiry_id=record.id,
+        inquiry_text=record.inquiry_text
+    )
+    
     return {
-        "message": "Inquiry classified successfully",
+        "message": "Inquiry classified and confirmation email sent successfully",
         "data": inquiry.model_dump(),
         "classification": classification,
     }
@@ -122,4 +130,15 @@ async def respond_to_inquiry(inquiry_id: int, response: InquiryResponse, db=Depe
         raise HTTPException(status_code=404, detail="Inquiry not found")
 
     print(f"Response for inquiry {inquiry_id}: {response.response}")
-    return {"message": "Response submitted successfully"}
+
+    message_id = send_response_email(
+        to_address=record.email,
+        inquiry_id=inquiry_id,
+        response_text=response.response,
+        inquiry_text=record.inquiry_text
+    )
+
+    if message_id:
+        return {"message": "Response submitted and email sent successfully", "emailMessageId": message_id}
+    else:
+        raise HTTPException(status_code=500, detail="Response submitted but failed to send email.")
