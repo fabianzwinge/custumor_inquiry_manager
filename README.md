@@ -1,31 +1,60 @@
 # 🚀 AWS Customer Inquiry Manager
 
-This project provides a solution for managing customer inquiries, featuring a ReactJS frontend and a FastAPI backend, both deployed on AWS EC2. It uses AWS Bedrock for AI-powered inquiry classification, AWS RDS for database storage and AWS SES for automated email communication.
+The AWS Customer Inquiry Manager is a web-based application for submitting, managing, and responding to customer inquiries.  
+It combines a ReactJS frontend with a FastAPI backend deployed on AWS EC2 and leverages AWS Bedrock for AI-powered inquiry classification.  
+Customer inquiries are stored in a PostgreSQL database on AWS RDS and handled through a dedicated manager dashboard, with all communication automated via AWS SES.
 
-
-## ✨ Features
-
-- Customer inquiry submission via a user-friendly web interface
-- Automatic classification of inquiries (category, urgency, summary) using AWS Bedrock
-- Data storage in AWS RDS (PostgreSQL)
-- Manager dashboard for reviewing and responding to inquiries
-- Automated email notifications and responses via AWS SES
-- CI/CD deployment with GitHub Actions
+---
 
 ## 📸 How the app looks...
 
+Below is a step-by-step walkthrough of the application flow, from submitting a customer inquiry to receiving a response.
 
-## ☁️ AWS Services Used
+### 1. Customer Inquiry Submission
 
-- **EC2:** Hosting for backend and frontend
-- **RDS:** PostgreSQL database for storing inquiries
-- **Bedrock:** AI service for inquiry classification
-- **SES:** Email sending service for notifications and responses
-- **IAM:** Secure access and permissions management
+Customers submit inquiries using a simple form by providing their name, email address, and inquiry text.
 
-## 📝 Prerequisites
+![Customer Inquiry Form](resources/inquiry.png)
 
-- Node.js & npm (for frontend)
-- Python 3.8+ & pip (for backend)
-- AWS account with access to EC2, RDS, Bedrock, SES, and IAM
-- AWS CLI configured with appropriate credentials
+---
+
+### 2. Inquiry Confirmation Email
+
+After submission, the system automatically sends a confirmation email to the customer, including the inquiry ID and a copy of the submitted message.
+
+![Inquiry Confirmation Email](resources/confirmation_email.png)
+
+---
+
+### 3. Manager Dashboard
+
+Managers can view all incoming inquiries in a centralized dashboard.  
+Inquiries are organized by **category**, **urgency**, **summary**, and **email**, and can be filtered and searched for efficient handling.
+
+![Manager Dashboard](resources/manager_view.png)
+
+---
+
+### 4. Manager View – Responding to an Inquiry
+
+Each inquiry can be opened individually to review its full details and submit a response directly through the manager interface.
+
+![Inquiry Response View](resources/inquiry_response.png)
+
+---
+
+### 5. Inquiry Response Email
+
+Once a response is sent, the customer automatically receives an email containing the manager’s reply along with the original inquiry for context.
+
+![Inquiry Response Email](resources/response_email.png)
+
+--- 
+
+## 🛠️ Prerequisites for Local Development
+
+- Node.js & npm  
+- Python 3.8+  
+- AWS account with access to EC2, RDS, Bedrock, SES, and IAM  
+- AWS CLI configured with appropriate credentials  
+
